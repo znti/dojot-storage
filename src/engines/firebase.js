@@ -30,7 +30,8 @@ export default class Storage {
 			return snapshot.ref.getDownloadURL().then((downloadURL) => {
 				console.log('Retrieved downloadUrl', downloadURL);
 				let uploadData = {
-					fileId,
+					id: fileId,
+					name: fileName,
 					downloadURL,
 				}
 				return Promise.resolve(uploadData);
