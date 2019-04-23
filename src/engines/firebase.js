@@ -1,18 +1,24 @@
 import firebase from 'firebase'
 
+const DEBUG = (...messages) => {
+	console.log('[STORAGE]', ...messages);
+}
+
 export default class Storage {
 	constructor(configs) {
-		console.log('Initializing storage with configs:', configs);
+		DEBUG('Initializing storage with configs:', configs);
 		if(firebase.apps.length > 0) {
-			console.log('Firebase is already initialized');
+			DEBUG('Firebase is already initialized');
 		} else {
-			console.log('Initializing firebase client');
+			DEBUG('Initializing firebase client');
 			firebase.initializeApp(configs);
 		}
 		this.storage = firebase.storage();
 	}
 
 	post(data) {
+		DEBUG('Posting data', data)
+
 		let fileName = data.name;
 		let fileSize = data.size;
 
@@ -24,11 +30,11 @@ export default class Storage {
 			},
 		}
 	
-		console.log('Uploading file', fileName, '!under ID', fileId);
+		DEBUG('Uploading file', fileName, 'into ID', fileId);
 		return this.storage.ref(fileId).put(data, metadata).then(snapshot => {
-			console.log('Got snapshot', snapshot);
+			DEBUG('Got snapshot', snapshot);
 			return snapshot.ref.getDownloadURL().then((downloadURL) => {
-				console.log('Retrieved downloadUrl', downloadURL);
+				DEBUG('Retrieved downloadUrl', downloadURL);
 				let uploadData = {
 					id: fileId,
 					name: fileName,
